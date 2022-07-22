@@ -1,24 +1,54 @@
-import logo from './logo.svg';
 import './App.css';
+import {
+  BrowserRouter,
+  Routes,
+  Route,
+} from "react-router-dom";
+import HomePage from './pages/HomePage';
+import ProductDetailPage from './pages/ProductDetailPage';
+import CreatePage from './pages/CreatePage';
+import axios from 'axios';
+import { createContext, useEffect, useState } from 'react';
+
+export const DataContext = createContext();
 
 function App() {
+
+  const [data, setData] = useState([]); // useState is used to access the data from the DataContext
+
+  const getData = async () => { // getData is a function that fetches the data from the server
+    try{
+      let data = await axios.get('https://62286b649fd6174ca82321f1.mockapi.io/case-study/products/')
+      .then(({data}) => data);
+      setData(data);
+    }catch(err){
+      console.log(err);
+    }
+  } 
+  
+  useEffect(() => { // useEffect is used to fetch the data from the server
+    getData();
+  }, []);
+
+const postDelete = async (id) => {  // id is the id of the product that is being deleted
+  try{
+    await axios.delete(`https://62286b649fd6174ca82321f1.mockapi.io/case-study/products/${id}`);
+  }catch(err){
+    console.log(err);
+  }
+  getData();
+}
+
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
+    <DataContext.Provider value={data}> 
+      <BrowserRouter>               
+         <Routes>
+          <Route exact path="/" element={<HomePage postDelete = {postDelete} />} />
+          <Route path="/productDetail" element={<ProductDetailPage/>}/>          
+          <Route path="/create" element={<CreatePage/>}/>                
+         </Routes>
+        </BrowserRouter>
+    </DataContext.Provider>
   );
 }
 
