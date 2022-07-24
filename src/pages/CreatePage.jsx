@@ -25,23 +25,23 @@ const CreatePage = () => {
     setInputPrice(e.target.value);
   }
 
-  const handleInputDescription = (e) => {
+  const handleInputDescription = (e) => { 
     setInputDescription(e.target.value);
   }
 
-  const handleSubmit = (e) => {
-    e.preventDefault();
+  const handleSubmit = (e) => { // handleSubmit is used to submit the data to the server
+    e.preventDefault(); // prevent the page from refreshing
   }
   //console.log(inputName, inputCategory, imageUrl, inputPrice, inputDescription);
 
   const postData = async () => {  // postData is a function that will post the data to the server
     try{
       axios.post('https://62286b649fd6174ca82321f1.mockapi.io/case-study/products/', {  // axios.post is a function that will post the data to the server
-        name : inputName,
-        category: inputCategory,
-        avatar: imageUrl,
-        description: inputDescription,
-        price: inputPrice,
+        name : inputName, // name is the name of the product
+        category: inputCategory,  // category is the name of the category
+        avatar: imageUrl, // avatar is the imageUrl
+        description: inputDescription,  // description is the value of the input
+        price: inputPrice,  // price is the value of the input
       })
     }catch(err){
       console.log(err);
@@ -69,7 +69,6 @@ const CreatePage = () => {
     onChange={handleInputCategory}>
     <option disabled value='select'>category</option>
     <option value='Electronic'>Electronic</option>
-    <option value='Furnitures'>Furnitures</option>
     <option value='Clothing'>Clothing</option>
     <option value='Accessories'>Accessories</option>
     </select>
@@ -97,7 +96,7 @@ const CreatePage = () => {
 
     </form> 
 
-    <button className='create-page-button' onClick={postData}>Submit</button>
+    <button className='create-page-button' onClick={postData}>Submit</button> 
 
     </div>
     </>
